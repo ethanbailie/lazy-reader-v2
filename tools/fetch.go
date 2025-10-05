@@ -12,6 +12,8 @@ type QuerySettings struct {
 	MaxResults int
 }
 
+// GetPapers is how the get call is made to get all relevant
+// papers of the selected categories. Defaults to NLP related.
 func GetPapers(opts QuerySettings) (string, error) {
 	baseURL := "http://export.arxiv.org/api/query"
 	params := url.Values{}
@@ -39,16 +41,16 @@ func GetPapers(opts QuerySettings) (string, error) {
 		maxResults = strconv.Itoa(opts.MaxResults)
 	}
 
-	search_query := ""
+	searchQuery := ""
 	for i, c := range categories {
 		if i > 0 {
-			search_query += "+OR+"
+			searchQuery += "+OR+"
 		}
 		category := "cat:" + c
-		search_query += category
+		searchQuery += category
 	}
 
-	params.Add("search_query", search_query)
+	params.Add("search_query", searchQuery)
 	params.Add("start", "0")
 	params.Add("max_results", maxResults)
 	params.Add("sortBy", "submittedDate")
